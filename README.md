@@ -62,6 +62,17 @@ My only concern is the time required to generate the next PRN for each OFF and O
 
 The ON and OFF durations are PRN, but are consistent throughout the given show.
 
+**commonCascadeShow**: Simply iterates the list of 8 I/Os, from 0 to 7, turning each ON & OFF, serially. The parameters for ON and OFF durations can be passed in and may be same or different.
+
+'Same' example:
+
+[100ms ON][100ms OFF][100ms ON][100ms OFF][100ms ON][100ms OFF]...
+
+'Different' example:
+
+[147ms ON][221ms OFF][147ms ON][221ms OFF][147ms ON][221ms OFF]...
+
+
 More...
 
 
