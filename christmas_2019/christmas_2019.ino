@@ -9,7 +9,7 @@
 unsigned long showDuration = 10000;
 
 /* Duration of Intermission between shows. */
-unsigned long intermissionDuration = 8000; 
+unsigned long intermissionDuration = 5000; 
 
 /* Various light types to be aware of. */
 enum light {flood, strand};
@@ -49,57 +49,57 @@ void setup()
 
   dp[0].type = flood;
   dp[0].pin = D1;
-  dp[0].onDuration = 50;
-  dp[0].offDuration = 500;
+  dp[0].onDuration = 25; //50;
+  dp[0].offDuration = 250; //500;
   dp[0].prevTime = 0;
   dp[0].currState = UNSET;
 
   dp[1].type = flood;
   dp[1].pin = D2;
-  dp[1].onDuration = 250;
-  dp[1].offDuration = 1000;
+  dp[1].onDuration = 125; //250;
+  dp[1].offDuration = 500; // 1000;
   dp[1].prevTime = 0;
   dp[1].currState = UNSET;
 
   dp[2].type = flood;
   dp[2].pin = D3;
-  dp[2].onDuration = 400;
-  dp[2].offDuration = 1500;
+  dp[2].onDuration = 200; //400;
+  dp[2].offDuration = 750; //1500;
   dp[2].prevTime = 0;
   dp[2].currState = UNSET;
 
   dp[3].type = strand;
   dp[3].pin = D4;
-  dp[3].onDuration = 400;
-  dp[3].offDuration = 875;
+  dp[3].onDuration = 200; //400;
+  dp[3].offDuration = 400; //875;
   dp[3].prevTime = 0;
   dp[3].currState = UNSET;
 
   dp[4].type = strand;
   dp[4].pin = D5;
-  dp[4].onDuration = 50;
-  dp[4].offDuration = 1500;
+  dp[4].onDuration = 25; //50;
+  dp[4].offDuration = 750; //1500;
   dp[4].prevTime = 0;
   dp[4].currState = UNSET;
 
   dp[5].type = strand;
   dp[5].pin = D6;
-  dp[5].onDuration = 300;
-  dp[5].offDuration = 1200;
+  dp[5].onDuration = 150; //300;
+  dp[5].offDuration = 600; //1200;
   dp[5].prevTime = 0;
   dp[5].currState = UNSET;
 
   dp[6].type = strand;
   dp[6].pin = D7;
-  dp[6].onDuration = 225;
-  dp[6].offDuration = 700;
+  dp[6].onDuration = 110; //225;
+  dp[6].offDuration = 350; //700;
   dp[6].prevTime = 0;
   dp[6].currState = UNSET;
 
   dp[7].type = strand;
   dp[7].pin = D8;
-  dp[7].onDuration = 125;
-  dp[7].offDuration = 400;
+  dp[7].onDuration = 60; //125;
+  dp[7].offDuration = 200; //400;
   dp[7].prevTime = 0;
   dp[7].currState = UNSET;
 
@@ -176,11 +176,11 @@ void randomizeEventTimings(event arr[], int size){
   Serial.println(">>> START RANDOMIZE");
   for (int i=0; i<size; i++){
     if (arr[i].type == flood) {
-      arr[i].onDuration = random(50, 400);
-      arr[i].offDuration = random(500, 1500);
+      arr[i].onDuration = random(25, 200);
+      arr[i].offDuration = random(250, 750);
     } else if  (arr[i].type == strand) {
-      arr[i].onDuration = random(50, 400);
-      arr[i].offDuration = random(500, 1500);            
+      arr[i].onDuration = random(25, 200);
+      arr[i].offDuration = random(250, 750);            
     }
     Serial.println(arr[i].type);
     Serial.println(arr[i].onDuration);
