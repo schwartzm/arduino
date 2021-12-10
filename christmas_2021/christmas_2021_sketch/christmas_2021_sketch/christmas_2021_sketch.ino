@@ -9,6 +9,9 @@ const int MAX_FILENAME_SIZE = 13; // Strict 8.3 filename 8chars+1dot+3chars+null
 const int MAX_FILES_PER_TOPIC = 250;
 const int TOPIC_COUNT = 11; // Total count of topics (stories, jokes, intros, etc.)
 
+// Structure to hold basic Topic info
+// A Topic is the type of content, such as
+// joke, riddle, intro_joke, intro_riddle
 struct Topic {
   const char *name;
   const char *dir;
@@ -64,8 +67,6 @@ void setup()
   topics[IFACTS]    = intFacts;
   topics[ISONGS]    = intSongs;
 
-  //int lenTopics = sizeof(topics)/sizeof(topics[0]);
-
   // Get file count in each topic
   for(int i=0; i<TOPIC_COUNT; i++){
     Serial.print("Topic name: ");
@@ -107,7 +108,7 @@ void playMedia(const char * topic){
   Serial.println("Main...");
   randomSeed(micros());
   int mainIdx = random(0, topics[mainTopicIndex].count);
-  Serial.print("Rdn Index: ");
+  Serial.print("Random index: ");
   Serial.println(mainIdx);
   File f1 = SD.open(topics[mainTopicIndex].dir);
   char mainFile[MAX_FILENAME_SIZE+1];
@@ -120,7 +121,7 @@ void playMedia(const char * topic){
   Serial.println("Intro...");
   randomSeed(micros());
   int introIdx = random(0, topics[introTopicIndex].count);
-  Serial.print("Rdn Index: ");
+  Serial.print("Random index: ");
   Serial.println(introIdx);
   File f2 = SD.open(topics[introTopicIndex].dir);
   char introFile[MAX_FILENAME_SIZE+1];
@@ -148,13 +149,13 @@ void getFileAtIndex(File dir, int selectIdx, char filename[]){
   while(true) {
      
      File entry =  dir.openNextFile();
-     Serial.println(entry.name());
      if (! entry) {
        Serial.println("** No more files **");
        break;
      }
      
      if (entry.isDirectory()) {
+       Serial.print(entry.name());
        Serial.println("/");
      } else {
        if (selectIdx == idx){
