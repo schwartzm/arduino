@@ -1,5 +1,12 @@
 #include "audio.h"
 
+// extern globals
+int Sensor = 2;     // RCWL-0516 Input Pin
+int sensorval = 0;  // RCWL-0516 Sensor Value
+Adafruit_VS1053_FilePlayer musicPlayer = 
+Adafruit_VS1053_FilePlayer(SHIELD_RESET, SHIELD_CS, SHIELD_DCS, DREQ, CARDCS);  
+
+// extern globals music management
 Topic topics[TOPIC_COUNT] = {};
   
 void setupTopics(){
@@ -82,12 +89,38 @@ void getFileAtIndex(File dir, int selectIdx, char filename[]){
 void playMedia(mainTopic topic){
 
   int mainTopicIndex, introTopicIndex;
-  
-  //if(topic == "story"){
-  if(topic == story){
-    mainTopicIndex = STORIES;
-    introTopicIndex = ISTORIES;
-  }
+
+  switch(topic)
+  {
+    case story:
+      mainTopicIndex = STORIES;
+      introTopicIndex = ISTORIES;
+      break;
+    case song:
+      mainTopicIndex = SONGS;
+      introTopicIndex = ISONGS;
+      break;
+    case joke:
+      mainTopicIndex = JOKES;
+      introTopicIndex = IJOKES;
+      break;
+    case fact:
+      mainTopicIndex = FACTS;
+      introTopicIndex = IFACTS;
+      break;
+    case riddle:
+      mainTopicIndex = RIDDLES;
+      introTopicIndex = IRIDDLES;
+      break;
+    case knock:
+      mainTopicIndex = KNOCK;
+      introTopicIndex = IJOKES;
+      break;
+    default:
+      mainTopicIndex = SONGS;
+      introTopicIndex = ISONGS;
+      break;
+  }  
 
   // Get the "main" audio file (story, joke, knock, etc.)
   Serial.println("Main...");
@@ -115,6 +148,26 @@ void playMedia(mainTopic topic){
   Serial.println(introFile);
   f2.close();
   Serial.println("-----------");
+
+  const String sep("/");
+  String mainDir(topics[mainTopicIndex].dir);
+  String mainF(mainFile);
+  String introDir(topics[introTopicIndex].dir);
+  String introF(introFile);
+
+  String mainFileToPlay = mainDir + sep + mainF;
+  String introFileToPlay = introDir + sep + introF;
+
+  Serial.print("introFileToPlay: ");
+  Serial.println(introFileToPlay);
+  
+  Serial.print("mainFileToPlay: ");
+  Serial.println(mainFileToPlay);
+
+  // TODO: Make volume loudest for songs, b/c they are sort of quiet.
+  // All else a bit lower.
+  musicPlayer.playFullFile(introFileToPlay.c_str());
+  musicPlayer.playFullFile(mainFileToPlay.c_str());
 }
 
 // Returns number of files in the given dir.

@@ -1,14 +1,32 @@
 #ifndef H_AUD
 #define H_AUD
 
-#include <SD.h>
 #include <SPI.h>
+#include <Adafruit_VS1053.h>
+#include <SD.h>
 #include <string.h>
 #include <Arduino.h> //needed for Serial.println
 
 #include "util.h"
 
+// ----------------------------
+// Adafruit Audio music maker
+extern int Sensor;     // RCWL-0516 Input Pin
+extern int sensorval;  // RCWL-0516 Sensor Value
+// These are the pins used for the music maker shield
+#define SHIELD_RESET  -1      // VS1053 reset pin (unused!)
+#define SHIELD_CS     7      // VS1053 chip select pin (output)
+#define SHIELD_DCS    6      // VS1053 Data/command select pin (output)
 
+// These are common pins between breakout and shield
+#define CARDCS 4     // Card chip select pin
+// DREQ should be an Int pin, see http://arduino.cc/en/Reference/attachInterrupt
+#define DREQ 3       // VS1053 Data request, ideally an Interrupt pin
+
+extern Adafruit_VS1053_FilePlayer musicPlayer;
+  
+// ----------------------------
+// Audio track management
 const uint8_t MAX_FILEPATH_SIZE = 15; // Max length of both file path + file name + dot + file ext.
 const uint8_t MAX_FILENAME_SIZE = 13; // Strict 8.3 filename 8chars+1dot+3chars+nullterm
 const uint8_t MAX_FILES_PER_TOPIC = 250;
@@ -31,10 +49,11 @@ struct Topic {
 
 enum mainTopic {
   story,
+  song,
   joke,
-  riddle,
   fact,
-  knock 
+  riddle,  
+  knock
 };
 
 extern Topic topics[TOPIC_COUNT];
