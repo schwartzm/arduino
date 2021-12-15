@@ -4,12 +4,12 @@
 #include "util.h"
 
 #define CARDCS 4     // Card chip select pin (SD reader on Adafruit Music Maker shield)
-const uint16_t showPause = 10 * 1000;
+const unsigned int showPause = 20000;
 void setup()
 { 
   delay(1000);
   Serial.begin(19200);
-  randomSeed(micros());
+  //randomSeed(micros());
 
   if (! musicPlayer.begin()) { // initialise the music player
      Serial.println(F("Couldn't find VS1053, do you have the right pins defined?"));
@@ -30,11 +30,13 @@ void setup()
 
 //mainTopic lastShow = story; // starting default: story
 mainTopic currShow = story;
+
 void loop()
 {
   delay(showPause);
   Serial.print("Free SRAM: ");
   Serial.println(freeMemory());
+  
   switch(currShow)
   {
     case story:
@@ -59,6 +61,7 @@ void loop()
       currShow = song;
       break;
   }
+  
   playMedia(currShow); // mainTopic enum
 
 }

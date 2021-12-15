@@ -123,10 +123,10 @@ void playMedia(mainTopic topic){
   }  
 
   // Get the "main" audio file (story, joke, knock, etc.)
-  Serial.println("Main...");
-  randomSeed(micros());
+  Serial.println("Main:");
+  randomSeed(micros()*2);
   uint16_t mainIdx = random(0, topics[mainTopicIndex].count);
-  Serial.print("Random index: ");
+  Serial.print("Main rnd: ");
   Serial.println(mainIdx);
   File f1 = SD.open(topics[mainTopicIndex].dir);
   char mainFile[MAX_FILENAME_SIZE+1];
@@ -135,11 +135,13 @@ void playMedia(mainTopic topic){
   Serial.println(mainFile);
   f1.close();
 
+  delay(1500);
+
   // Get the intro file (intro associated with main topic)
-  Serial.println("Intro...");
-  randomSeed(micros());
+  Serial.println("Intro:");
+  randomSeed(micros()*3);
   uint16_t introIdx = random(0, topics[introTopicIndex].count);
-  Serial.print("Random index: ");
+  Serial.print("Intro rnd: ");
   Serial.println(introIdx);
   File f2 = SD.open(topics[introTopicIndex].dir);
   char introFile[MAX_FILENAME_SIZE+1];
@@ -147,7 +149,6 @@ void playMedia(mainTopic topic){
   Serial.print("File: ");
   Serial.println(introFile);
   f2.close();
-  Serial.println("-----------");
 
   const String sep("/");
   String mainDir(topics[mainTopicIndex].dir);
@@ -167,7 +168,18 @@ void playMedia(mainTopic topic){
   // TODO: Make volume loudest for songs, b/c they are sort of quiet.
   // All else a bit lower.
   musicPlayer.playFullFile(introFileToPlay.c_str());
+
+  if (topic == song){
+    Serial.println("song pause");
+    delay(2000);
+  }else {
+    delay(1000);
+  }
+  
   musicPlayer.playFullFile(mainFileToPlay.c_str());
+  Serial.println("-----------");
+
+  delay(2000);
 }
 
 // Returns number of files in the given dir.
