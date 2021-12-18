@@ -4,9 +4,9 @@
 #include "util.h"
 
 #define CARDCS 4     // Card chip select pin (SD reader on Adafruit Music Maker shield)
-const unsigned int showPause = 20000;
+const unsigned long showPause = 120000; // ms
 void setup()
-{ 
+{
   delay(1000);
   Serial.begin(19200);
   //randomSeed(micros());
