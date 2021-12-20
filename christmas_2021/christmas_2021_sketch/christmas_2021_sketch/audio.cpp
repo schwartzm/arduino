@@ -123,7 +123,6 @@ void playMedia(mainTopic topic){
   }  
 
   // Get the "main" audio file (story, joke, knock, etc.)
-  Serial.println("Main:");
   randomSeed(micros()*2);
   uint16_t mainIdx = random(0, topics[mainTopicIndex].count);
   Serial.print("Main rnd: ");
@@ -138,7 +137,6 @@ void playMedia(mainTopic topic){
   delay(1500);
 
   // Get the intro file (intro associated with main topic)
-  Serial.println("Intro:");
   randomSeed(micros()*3);
   uint16_t introIdx = random(0, topics[introTopicIndex].count);
   Serial.print("Intro rnd: ");
@@ -178,6 +176,7 @@ void playMedia(mainTopic topic){
   musicPlayer.playFullFile(mainFileToPlay.c_str());
 
   if (topic == song){
+    Serial.println("Hack post-song delay");
     delay(15000); // MID audio keeps playing (audibly), even though the
                   // playFullFile() function has already returned.
                   // This is a hack to add arbitrary buffer after playFullFile returns.
