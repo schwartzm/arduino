@@ -56,6 +56,7 @@ enum mainTopic {
   knock
 };
 
+
 extern Topic topics[TOPIC_COUNT];
 
 const uint8_t STORIES   = 0;

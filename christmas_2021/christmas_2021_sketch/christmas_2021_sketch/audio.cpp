@@ -131,8 +131,8 @@ void playMedia(mainTopic topic){
   File f1 = SD.open(topics[mainTopicIndex].dir);
   char mainFile[MAX_FILENAME_SIZE+1];
   getFileAtIndex(f1, mainIdx, mainFile);
-  Serial.print("File: ");
-  Serial.println(mainFile);
+  //Serial.print("File: ");
+  //Serial.println(mainFile);
   f1.close();
 
   delay(1500);
@@ -146,8 +146,8 @@ void playMedia(mainTopic topic){
   File f2 = SD.open(topics[introTopicIndex].dir);
   char introFile[MAX_FILENAME_SIZE+1];
   getFileAtIndex(f2, introIdx, introFile);
-  Serial.print("File: ");
-  Serial.println(introFile);
+  //Serial.print("File: ");
+  //Serial.println(introFile);
   f2.close();
 
   const String sep("/");
@@ -159,27 +159,31 @@ void playMedia(mainTopic topic){
   String mainFileToPlay = mainDir + sep + mainF;
   String introFileToPlay = introDir + sep + introF;
 
-  Serial.print("introFileToPlay: ");
+  Serial.print("Playing intro: ");
   Serial.println(introFileToPlay);
-  
-  Serial.print("mainFileToPlay: ");
-  Serial.println(mainFileToPlay);
 
   // TODO: Make volume loudest for songs, b/c they are sort of quiet.
   // All else a bit lower.
   musicPlayer.playFullFile(introFileToPlay.c_str());
 
   if (topic == song){
-    Serial.println("song pause");
-    delay(2000);
+    delay(2500);
   }else {
-    delay(1000);
+    delay(2000);
   }
+
+  Serial.print("Playing content: ");
+  Serial.println(mainFileToPlay);  
   
   musicPlayer.playFullFile(mainFileToPlay.c_str());
-  Serial.println("-----------");
 
-  delay(2000);
+  if (topic == song){
+    delay(15000); // MID audio keeps playing (audibly), even though the
+                  // playFullFile() function has already returned.
+                  // This is a hack to add arbitrary buffer after playFullFile returns.
+                  // MP3 doesn't seem to do this, or it's not obvious.
+  }
+  Serial.println("-----------");
 }
 
 // Returns number of files in the given dir.

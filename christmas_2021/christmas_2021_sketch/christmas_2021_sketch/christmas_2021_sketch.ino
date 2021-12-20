@@ -4,7 +4,7 @@
 #include "util.h"
 
 #define CARDCS 4     // Card chip select pin (SD reader on Adafruit Music Maker shield)
-const unsigned long showPause = 120000; // ms
+const unsigned long showPause = 30000; // ms
 void setup()
 {
   delay(1000);
@@ -30,13 +30,53 @@ void setup()
 
 //mainTopic lastShow = story; // starting default: story
 mainTopic currShow = story;
+mainTopic lastSpoken = story;
+
+//bool isSpokenLast = true 
+//spokenContent currShow = story;
 
 void loop()
 {
   delay(showPause);
   Serial.print("Free SRAM: ");
   Serial.println(freeMemory());
+
+  Serial.print("pre-switch: ");
+  Serial.println(currShow);
   
+  if (currShow == song) {
+    // play something other than a song
+    switch(lastSpoken)
+    {
+      case story:
+        currShow = riddle;
+        break;
+      case riddle:
+        currShow = joke;
+        break;
+      case joke:
+        currShow = fact;
+        break;
+      case fact:
+        currShow = knock;
+        break;
+      case knock:
+        currShow = story;
+        break;
+      default:
+        Serial.println("Default case: joke");
+        currShow = joke;  
+    }
+    lastSpoken = currShow;
+  } else {
+    currShow = song;
+  }
+  Serial.print("post-switch: ");
+  Serial.println(currShow);
+  playMedia(currShow);
+}
+
+  /*
   switch(currShow)
   {
     case story:
@@ -61,7 +101,5 @@ void loop()
       currShow = song;
       break;
   }
+  */
   
-  playMedia(currShow); // mainTopic enum
-
-}
