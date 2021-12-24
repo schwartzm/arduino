@@ -1,15 +1,16 @@
 #include <string.h>
+#include <Wire.h>
 
 #include "audio.h"
 #include "util.h"
 
 #define CARDCS 4     // Card chip select pin (SD reader on Adafruit Music Maker shield)
-const unsigned long showPause = 30000; // ms
+const unsigned long showPause = 90000; // ms
 void setup()
 {
   delay(1000);
-  Serial.begin(19200);
-  //randomSeed(micros());
+  Serial.begin(9600);
+  Wire.begin();
 
   if (! musicPlayer.begin()) { // initialise the music player
      Serial.println(F("Couldn't find VS1053, do you have the right pins defined?"));
@@ -34,6 +35,14 @@ mainTopic lastSpoken = story;
 
 //bool isSpokenLast = true 
 //spokenContent currShow = story;
+
+
+void sendLightStateMssg(byte mssg){
+  Wire.beginTransmission(4);
+  Wire.write(mssg);
+  Wire.endTransmission();
+}
+
 
 void loop()
 {
@@ -73,33 +82,10 @@ void loop()
   }
   Serial.print("post-switch: ");
   Serial.println(currShow);
+  sendLightStateMssg(1);
+  delay(10000);
   playMedia(currShow);
+  delay(10000);
+  sendLightStateMssg(0);
 }
-
-  /*
-  switch(currShow)
-  {
-    case story:
-      currShow = song;
-      break;
-    case song:
-      currShow = joke;
-      break;
-    case joke:
-      currShow = fact;
-      break;
-    case fact:
-      currShow = riddle;
-      break;
-    case riddle:
-      currShow = knock;
-      break;
-    case knock:
-      currShow = story;
-      break;      
-    default:
-      currShow = song;
-      break;
-  }
-  */
-  
+ 
