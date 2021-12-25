@@ -83,6 +83,18 @@ void getFileAtIndex(File dir, int selectIdx, char filename[]){
   } 
 }
 
+unsigned long getSeed()
+{
+  uint32_t seed = 0;
+  for (int i=0; i<32; i++)
+  {
+    seed = (seed << 1) & (analogRead(0) & 0x01);
+  }
+
+  return seed;  
+}
+
+
 
 // Plays the media for the given topic (story, joke, etc.).
 //void playMedia(const char * topic){
@@ -123,7 +135,8 @@ void playMedia(mainTopic topic){
   }  
 
   // Get the "main" audio file (story, joke, knock, etc.)
-  randomSeed(micros()*2);
+  //randomSeed(micros()*2);
+  randomSeed(getSeed());
   uint16_t mainIdx = random(0, topics[mainTopicIndex].count);
   Serial.print("Main rnd: ");
   Serial.println(mainIdx);
@@ -137,7 +150,8 @@ void playMedia(mainTopic topic){
   delay(1500);
 
   // Get the intro file (intro associated with main topic)
-  randomSeed(micros()*3);
+  //randomSeed(micros()*3);
+  randomSeed(getSeed());
   uint16_t introIdx = random(0, topics[introTopicIndex].count);
   Serial.print("Intro rnd: ");
   Serial.println(introIdx);
